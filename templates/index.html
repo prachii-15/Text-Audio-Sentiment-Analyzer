@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d9e4f5, #f9f9f9);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #007bff;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            background: rgba(0, 123, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .loading {
+            display: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function showLoading() {
+            document.getElementById("loading").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Text & Audio Sentiment Analysis</h2>
+
+        <!-- Text Sentiment Analysis Form -->
+        <form action="/" method="post">
+            <textarea name="review" placeholder="Enter your review..." required></textarea>
+            <button type="submit" name="submit" value="text">Analyze Text</button>
+        </form>
+
+        <!-- Audio Sentiment Analysis Form -->
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="audio_file" accept="audio/*" required>
+            <button type="submit" name="submit" value="audio" onclick="showLoading()">Analyze Audio</button>
+        </form>
+
+        <div id="loading" class="loading">Processing audio... Please wait.</div>
+
+        {% if review or transcribed_text or sentiment_score is defined %}
+        <div class="results">
+            <h3>Analysis Results</h3>
+            
+            {% if review %}
+                <p><strong>Review:</strong> {{ review }}</p>
+            {% elif transcribed_text %}
+                <p><strong>Transcribed Text:</strong> {{ transcribed_text }}</p>
+            {% endif %}
+
+            {% if sentiment_score is defined %}
+                <p><strong>VADER Sentiment Score:</strong> {{ sentiment_score }}</p>
+
+                <!-- Display sentiment as labels (Positive, Neutral, Negative) -->
+                {% if sentiment_score >= 0.05 %}
+                    <p><strong>Sentiment:</strong> Positive</p>
+                {% elif sentiment_score <= -0.05 %}
+                    <p><strong>Sentiment:</strong> Negative</p>
+                {% else %}
+                    <p><strong>Sentiment:</strong> Neutral</p>
+                {% endif %}
+
+                <!-- Logistic Regression Prediction -->
+                {% if prediction_lr is defined %}
+                    <p><strong>Logistic Regression Sentiment:</strong> {{ prediction_lr }}</p>
+                {% endif %}
+
+                <!-- Naïve Bayes Prediction -->
+                {% if prediction_nb is defined %}
+                    <p><strong>Naïve Bayes Sentiment:</strong> {{ prediction_nb }}</p>
+                {% endif %}
+            {% else %}
+                <p class="error">⚠️ Unable to process sentiment analysis. Please check the input.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
