@@ -9,7 +9,7 @@ recognizer = sr.Recognizer()
 analyzer = SentimentIntensityAnalyzer()
 
 # Path to the folder where audio files are stored
-audio_folder = r"E:\Elite Technocrats\Project\audios"  # Replace with your actual folder path
+audio_folder = r"E:\Elite Technocrats\Project\audios" 
 
 # Path to the CSV file where transcriptions & sentiment analysis will be saved
 output_csv = "transcribed_audio_with_sentiment.csv"
@@ -53,10 +53,6 @@ for file in os.listdir(audio_folder):
                 print(f"❌ API Request Error for {file_path}; {e}")
                 data.append(["API Request Error", "N/A", "N/A"])
 
-# Convert results to DataFrame
 df = pd.DataFrame(data, columns=["Transcribed Text", "TextBlob Sentiment", "VADER Sentiment"])
-
-# Save to CSV
 df.to_csv(output_csv, mode='a', header=not file_exists, index=False)
-
 print(f"📄 All transcriptions with sentiment analysis saved to {output_csv}")

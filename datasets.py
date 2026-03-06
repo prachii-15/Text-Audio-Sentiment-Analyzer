@@ -127,6 +127,6 @@ reviews = [
 # Generate Audio for Each Review
 for i, review in enumerate(reviews, 1):
     tts = gTTS(review)  
-    tts.save(f"audios/audio_{i}.mp3")  # Save audio file for each review
+    tts.save(f"audios/audio_{i}.mp3")  
     print(f"Audio file saved as audio_{i}.mp3")
 

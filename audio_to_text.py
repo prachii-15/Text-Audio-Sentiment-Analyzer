@@ -6,7 +6,7 @@ import os
 recognizer = sr.Recognizer()
 
 # Path to the folder where audio files are stored
-audio_folder = r"E:\Elite Technocrats\Project\audios"  # Replace with your actual folder path
+audio_folder = r"E:\Elite Technocrats\Project\audios"  
 
 # Path to the CSV file where transcriptions will be saved
 output_csv = "transcribed_audio.csv"
